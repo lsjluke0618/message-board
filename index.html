@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>留言板</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="title">留言板</h1>
+    <p class="subtitle">留下你的想法吧</p>
+  </header>
+
+  <main class="container">
+
+    <!-- 表单区 -->
+    <section class="form-card">
+      <input type="text" id="nameInput" class="input" placeholder="你的昵称" maxlength="30">
+      <textarea id="contentInput" class="textarea" rows="4" placeholder="写点什么…" maxlength="500"></textarea>
+      <button id="submitBtn" class="submit-btn">发表留言</button>
+      <p id="formMsg" class="form-msg"></p>
+    </section>
+
+    <!-- 留言列表区 -->
+    <section class="messages">
+      <h2 class="messages-title">全部留言</h2>
+      <ul id="messageList" class="message-list"></ul>
+      <p id="emptyTip" class="empty-tip">还没有留言，来抢沙发吧！</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">用 Codex 创建于 2026年8月</footer>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+
+    const listEl = document.getElementById('messageList');
+    const emptyTip = document.getElementById('emptyTip');
+    const nameInput = document.getElementById('nameInput');
+    const contentInput = document.getElementById('contentInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const formMsg = document.getElementById('formMsg');
+
+    // 获取并展示所有留言，最新的在最上面
+    async function loadMessages() {
+      try {
+        const res = await fetch(API_BASE + '/messages');
+        if (!res.ok) throw new Error('加载失败');
+        const messages = await res.json();
+        renderMessages(messages);
+      } catch (err) {
+        formMsg.textContent = '留言加载失败，请确认服务器已启动（node server.js）';
+        formMsg.className = 'form-msg error';
+      }
+    }
+
+    function renderMessages(messages) {
+      listEl.innerHTML = '';
+
+      messages.slice().reverse().forEach(function (msg) {
+        const li = document.createElement('li');
+        li.className = 'message-card';
+
+        const head = document.createElement('div');
+        head.className = 'message-head';
+
+        const name = document.createElement('span');
+        name.className = 'message-name';
+        name.textContent = msg.name;
+
+        const time = document.createElement('span');
+        time.className = 'message-time';
+        time.textContent = msg.time || '';
+
+        head.appendChild(name);
+        head.appendChild(time);
+
+        const content = document.createElement('p');
+        content.className = 'message-content';
+        content.textContent = msg.content;
+
+        li.appendChild(head);
+        li.appendChild(content);
+        listEl.appendChild(li);
+      });
+
+      emptyTip.style.display = messages.length ? 'none' : 'block';
+    }
+
+    // 发表留言
+    async function submitMessage() {
+      const name = nameInput.value.trim();
+      const content = contentInput.value.trim();
+
+      if (!name) {
+        formMsg.textContent = '请先填写昵称';
+        formMsg.className = 'form-msg error';
+        nameInput.focus();
+        return;
+      }
+      if (!content) {
+        formMsg.textContent = '请先填写留言内容';
+        formMsg.className = 'form-msg error';
+        contentInput.focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '发表中…';
+
+      try {
+        const res = await fetch(API_BASE + '/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, content: content })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '发表失败');
+
+        nameInput.value = '';
+        contentInput.value = '';
+        formMsg.textContent = '发表成功！';
+        formMsg.className = 'form-msg ok';
+
+        loadMessages();
+      } catch (err) {
+        formMsg.textContent = err.message || '发表失败，请确认服务器已启动';
+        formMsg.className = 'form-msg error';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '发表留言';
+      }
+    }
+
+    submitBtn.addEventListener('click', submitMessage);
+
+    // 按 Ctrl/Cmd + Enter 快速发表
+    contentInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+        submitMessage();
+      }
+    });
+
+    // 页面加载时自动获取留言
+    loadMessages();
+  </script>
+</body>
+</html>

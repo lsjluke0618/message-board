@@ -1,0 +1,229 @@
+/* ===== 全局基础：深色科技风，和作品集一致 ===== */
+:root {
+  --bg-dark: #060b18;
+  --bg-card: #0d1628;
+  --accent: #22d3ee;
+  --accent-2: #3b82f6;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59, 130, 246, 0.18), transparent),
+    var(--bg-dark);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===== 顶部标题区 ===== */
+.header {
+  text-align: center;
+  padding: 64px 20px 28px;
+}
+
+.title {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+/* ===== 主体布局 ===== */
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+/* ===== 表单区 ===== */
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: #0a1120;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #64748b;
+}
+
+.submit-btn {
+  align-self: flex-end;
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 11px 30px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #060b18;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(34, 211, 238, 0.35);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-msg {
+  min-height: 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.form-msg.error {
+  color: #f87171;
+}
+
+.form-msg.ok {
+  color: #34d399;
+}
+
+/* ===== 留言列表区 ===== */
+.messages {
+  margin-top: 32px;
+}
+
+.messages-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.messages-title::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.message-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.message-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  border-radius: 14px;
+  padding: 16px 18px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.message-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 10px 28px rgba(34, 211, 238, 0.1);
+}
+
+.message-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.message-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.message-time {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.message-content {
+  font-size: 15px;
+  color: var(--text);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.empty-tip {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ===== 页脚 ===== */
+.footer {
+  padding: 24px 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+/* ===== 响应式：手机端 ===== */
+@media (max-width: 520px) {
+  .header {
+    padding-top: 48px;
+  }
+
+  .form-card {
+    padding: 18px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    align-self: stretch;
+    text-align: center;
+  }
+}

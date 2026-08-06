@@ -1,0 +1,12 @@
+{
+  "name": "message-board",
+  "version": "1.0.0",
+  "description": "留言板 - 前端 + 后端 (Node.js)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
